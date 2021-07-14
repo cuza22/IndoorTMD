@@ -12,20 +12,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private ArrayList<RecyclerViewItem> mData = null;
 
-    public RecyclerViewAdapter(ArrayList<RecyclerViewItem> mData) {
+    private ArrayList<RecyclerViewItem> mData;
+    private Context context;
+
+    public RecyclerViewAdapter(ArrayList<RecyclerViewItem> mData, Context context) {
         this.mData = mData;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // TODO: onCreateViewHolder
         Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.recycler_item, parent, false);
-        RecyclerViewAdapter.ViewHolder vh = new RecyclerViewAdapter.ViewHolder(view);
+        ViewHolder vh = new ViewHolder(view);
 
         return vh;
     }
@@ -36,6 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.ip.setText(item.getId());
         holder.mac.setText(item.getMac());
+        holder.rssi.setText(item.getRssi());
     }
 
     @Override
@@ -44,14 +49,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView ip;
-        TextView mac;
+        public TextView ip;
+        public TextView mac;
+        public TextView rssi;
 
-        ViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
 
             ip = itemView.findViewById(R.id.ip);
             mac = itemView.findViewById(R.id.mac);
+            rssi = itemView.findViewById(R.id.rssi);
         }
     }
 }

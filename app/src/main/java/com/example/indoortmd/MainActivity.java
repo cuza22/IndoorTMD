@@ -8,7 +8,6 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,16 +22,14 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView = null;
     private RecyclerViewAdapter mAdapter = null;
-    ArrayList<RecyclerViewItem> mList;
 
-//    private String mIdText;
-//    private String mMacText;
     // WifiManager
-    BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+    BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
         // wifiManager.startScan()시 발동되는 메소드
         @Override
         public void onReceive(Context context, Intent intent) {
-            boolean success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
+            System.out.println("onReceive");
+            boolean success = intent.getBooleanExtra(mWifiManager.EXTRA_RESULTS_UPDATED, false);
             if(success) {
                 scanSuccess();
             } else {
@@ -41,34 +38,38 @@ public class MainActivity extends AppCompatActivity {
         } // onReceive()
     };
 
-    // TODO 1: scanSuccess()
     // wifi 검색 성공
     private void scanSuccess() {
+        System.out.println("scan success!");
         List<ScanResult> mScanResults = mWifiManager.getScanResults();
+        System.out.println("scan result size");
+        System.out.println(mScanResults.size());
         ArrayList<RecyclerViewItem> mScanResultsData = scanResultsToRecyclerViewItems(mScanResults);
 
-        mAdapter = new RecyclerViewAdapter(mScanResultsData);
+        mAdapter = new RecyclerViewAdapter(mScanResultsData, MainActivity.this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     private void scanFailure() {
+        System.out.println("scan failed!");
     } // scanSuccess()
 
     private ArrayList<RecyclerViewItem> scanResultsToRecyclerViewItems(List<ScanResult> results) {
         ArrayList<RecyclerViewItem> resultsData = new ArrayList<>();
 
-        // TODO 2: use iterator
         Iterator iterator = results.listIterator();
         while(iterator.hasNext()) {
             // set temp RVI
             RecyclerViewItem newRecyclerViewItem = new RecyclerViewItem();
             // get wifi data
             ScanResult wifiData = (ScanResult) iterator.next();
-            String id = wifiData.SSID.toString(); // wifi 이름
-            String mac = wifiData.BSSID.toString(); // mac 주소
+            String id = wifiData.SSID; // wifi 이름
+            String mac = wifiData.BSSID; // mac 주소
+            int rssi = wifiData.level; // rssi
             // put wifi data in temp RVI
             newRecyclerViewItem.setId(id);
             newRecyclerViewItem.setMac(mac);
+            newRecyclerViewItem.setRssi(rssi);
             // append temp RVI to RVI array
             resultsData.add(newRecyclerViewItem);
         }
@@ -84,27 +85,44 @@ public class MainActivity extends AppCompatActivity {
 
         // recycler view
         mRecyclerView = findViewById(R.id.recyclerView);
-        mList = new ArrayList<>();
+
+        // permissions
 
         // wifi manager
         mWifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         mIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        getApplicationContext().registerReceiver(wifiScanReceiver, mIntentFilter);
+        getApplicationContext().registerReceiver(mWifiScanReceiver, mIntentFilter);
 
     } // onCreate()
 
     public void onClick(View view) {
-        mWifiManager.startScan();
+        System.out.println("onClick");
+        boolean success = mWifiManager.startScan();
+        System.out.println(success);
     } // onClick()
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView ipText;
-        TextView macText;
+//    @Override
+//    public void onDenied(int i, String[] strings) {
+//        Toast.makeText(this, "Denied", Toast.LENGTH_SHORT).show();
+//    }
+//    @Override
+//    public void onGranted(int i, String[] strings) {
+//        Toast.makeText(this, "Granted", Toast.LENGTH_SHORT).show();
+//    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
+//    }
 
-        ViewHolder(View itemView) {
-            super(itemView);
-            ipText = itemView.findViewById(R.id.ip);
-            macText = itemView.findViewById(R.id.mac);
-        }
-    }
+//    public class ViewHolder extends RecyclerView.ViewHolder {
+//        TextView ipText;
+//        TextView macText;
+//
+//        ViewHolder(View itemView) {
+//            super(itemView);
+//            ipText = itemView.findViewById(R.id.ip);
+//            macText = itemView.findViewById(R.id.mac);
+//        }
+//    }
 }
