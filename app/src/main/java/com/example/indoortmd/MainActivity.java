@@ -17,8 +17,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    Context context = getApplicationContext();
     IntentFilter mIntentFilter = new IntentFilter();
-    WifiManager mWifiManager = null;
+//    WifiManager mWifiManager = null;
+    WifiManager mWifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
 
     private RecyclerView mRecyclerView = null;
     private RecyclerViewAdapter mAdapter = null;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             System.out.println("onReceive");
-            boolean success = intent.getBooleanExtra(mWifiManager.EXTRA_RESULTS_UPDATED, false);
+            boolean success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false);
             if(success) {
                 scanSuccess();
             } else {
@@ -38,12 +40,43 @@ public class MainActivity extends AppCompatActivity {
         } // onReceive()
     };
 
+//    IntentFilter mIntentFilter = new IntentFilter();
+//    mIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+//    context.registerReceiver(mWifiScanReceiver, mIntentFilter);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // main view loading
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // recycler view
+        mRecyclerView = findViewById(R.id.recyclerView);
+
+        // permissions
+
+        // wifi manager
+        mWifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        mIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        context.registerReceiver(mWifiScanReceiver, mIntentFilter);
+
+    } // onCreate()
+
+    public void onClick(View view) {
+        System.out.println("onClick");
+        boolean success = mWifiManager.startScan();
+        System.out.println(success);
+        if(!success) {
+            scanFailure();
+        }
+    } // onClick()
+
     // wifi 검색 성공
     private void scanSuccess() {
-        System.out.println("scan success!");
+        System.out.println("scan success!"); // debug
         List<ScanResult> mScanResults = mWifiManager.getScanResults();
-        System.out.println("scan result size");
-        System.out.println(mScanResults.size());
+        System.out.println("scan result size"); // debug
+        System.out.println(mScanResults.size()); // debug
         ArrayList<RecyclerViewItem> mScanResultsData = scanResultsToRecyclerViewItems(mScanResults);
 
         mAdapter = new RecyclerViewAdapter(mScanResultsData, MainActivity.this);
@@ -76,30 +109,6 @@ public class MainActivity extends AppCompatActivity {
 
         return resultsData;
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // main view loading
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // recycler view
-        mRecyclerView = findViewById(R.id.recyclerView);
-
-        // permissions
-
-        // wifi manager
-        mWifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        mIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-        getApplicationContext().registerReceiver(mWifiScanReceiver, mIntentFilter);
-
-    } // onCreate()
-
-    public void onClick(View view) {
-        System.out.println("onClick");
-        boolean success = mWifiManager.startScan();
-        System.out.println(success);
-    } // onClick()
 
 //    @Override
 //    public void onDenied(int i, String[] strings) {
