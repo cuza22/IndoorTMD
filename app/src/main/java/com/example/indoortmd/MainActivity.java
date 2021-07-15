@@ -22,12 +22,12 @@ import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    Context context;
-    IntentFilter mIntentFilter;
+//    Context context;
+    IntentFilter mIntentFilter = new IntentFilter();
     WifiManager mWifiManager;
 
-    private RecyclerView mRecyclerView = null;
-    private RecyclerViewAdapter mAdapter = null;
+    private RecyclerView mRecyclerView;
+    private RecyclerViewAdapter mAdapter;
 
     final String CoarseLocation = Manifest.permission.ACCESS_COARSE_LOCATION;
     final String AccessWifi = Manifest.permission.ACCESS_WIFI_STATE;
@@ -53,19 +53,19 @@ public class MainActivity extends AppCompatActivity {
         // main view loading
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = getApplicationContext();
+//        context = getApplicationContext();
 
         // recycler view
         mRecyclerView = findViewById(R.id.recyclerView);
 
         // set wifi manager
-        mWifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+        mWifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         mWifiManager.setWifiEnabled(true);
 
-        mIntentFilter = new IntentFilter();
+//        mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
-        context.registerReceiver(mWifiScanReceiver, mIntentFilter);
+        getApplicationContext().registerReceiver(mWifiScanReceiver, mIntentFilter);
 
     } // onCreate()
 
@@ -113,10 +113,14 @@ public class MainActivity extends AppCompatActivity {
         List<ScanResult> mScanResults = mWifiManager.getScanResults();
         System.out.println("scan result size"); // debug
         System.out.println(mScanResults.size()); // debug
-        ArrayList<RecyclerViewItem> mScanResultsData = scanResultsToRecyclerViewItems(mScanResults);
+        System.out.println(mScanResults); // debug
+//        ArrayList<RecyclerViewItem> mScanResultsData = scanResultsToRecyclerViewItems(mScanResults);
 
-        mAdapter = new RecyclerViewAdapter(mScanResultsData, MainActivity.this);
+//        mAdapter = new RecyclerViewAdapter(mScanResultsData, MainActivity.this);
+        mAdapter = new RecyclerViewAdapter(mScanResults, MainActivity.this);
         mRecyclerView.setAdapter(mAdapter);
+        System.out.println(mRecyclerView.getLayoutManager());
+//        System.out.println(mAdapter.getItemCount());
         mAdapter.notifyDataSetChanged();
     } // scanSuccess()
 
