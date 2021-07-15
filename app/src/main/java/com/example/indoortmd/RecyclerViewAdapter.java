@@ -46,6 +46,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView ip;
         public TextView mac;
         public TextView rssi;
+        public TextView capabilities;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -53,12 +54,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ip = itemView.findViewById(R.id.ip);
             mac = itemView.findViewById(R.id.mac);
             rssi = itemView.findViewById(R.id.rssi);
+            capabilities = itemView.findViewById(R.id.capabilities);
         }
 
         public void setItem(ScanResult item) {
             ip.setText("ID: " + String.valueOf(item.SSID));
             mac.setText("MAC: " + String.valueOf(item.BSSID));
             rssi.setText("RSSI: " + String.valueOf(item.level));
+            capabilities.setText(String.valueOf(item.capabilities));
         }
     }
+
 }

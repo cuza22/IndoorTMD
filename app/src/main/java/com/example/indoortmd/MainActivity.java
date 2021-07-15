@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -108,17 +110,22 @@ public class MainActivity extends AppCompatActivity {
 
     // wifi 검색 성공
     private void scanSuccess() {
-//        System.out.println("scan success!"); // debug
+        // scanning success
         List<ScanResult> mScanResults = mWifiManager.getScanResults();
-//        System.out.println("scan result size"); // debug
-//        System.out.println(mScanResults.size()); // debug
-//        System.out.println(mScanResults); // debug
+//        System.out.println(mScanResults.get(0).capabilities);
 
+        // sort by rssi
+        Comparator<ScanResult> comparator = (lhs, rhs) -> (lhs.level < rhs.level ? -1 : (lhs.level == rhs.level ? 0 : 1));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(mScanResults, comparator.reversed());
+        }
+
+        // attach adapter to recyclerview
         mAdapter = new RecyclerViewAdapter(mScanResults, MainActivity.this);
         mRecyclerView.setAdapter(mAdapter);
-//        System.out.println(mRecyclerView.getLayoutManager());
         mAdapter.notifyDataSetChanged();
 
+        // toast message
         Toast.makeText(getApplicationContext(), "scan success!", Toast.LENGTH_SHORT).show();
 
     } // scanSuccess()
