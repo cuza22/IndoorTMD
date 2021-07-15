@@ -13,12 +13,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -109,46 +108,26 @@ public class MainActivity extends AppCompatActivity {
 
     // wifi 검색 성공
     private void scanSuccess() {
-        System.out.println("scan success!"); // debug
+//        System.out.println("scan success!"); // debug
         List<ScanResult> mScanResults = mWifiManager.getScanResults();
-        System.out.println("scan result size"); // debug
-        System.out.println(mScanResults.size()); // debug
-        System.out.println(mScanResults); // debug
-//        ArrayList<RecyclerViewItem> mScanResultsData = scanResultsToRecyclerViewItems(mScanResults);
+//        System.out.println("scan result size"); // debug
+//        System.out.println(mScanResults.size()); // debug
+//        System.out.println(mScanResults); // debug
 
-//        mAdapter = new RecyclerViewAdapter(mScanResultsData, MainActivity.this);
         mAdapter = new RecyclerViewAdapter(mScanResults, MainActivity.this);
         mRecyclerView.setAdapter(mAdapter);
-        System.out.println(mRecyclerView.getLayoutManager());
-//        System.out.println(mAdapter.getItemCount());
+//        System.out.println(mRecyclerView.getLayoutManager());
         mAdapter.notifyDataSetChanged();
+
+        Toast.makeText(getApplicationContext(), "scan success!", Toast.LENGTH_SHORT).show();
+
     } // scanSuccess()
 
     private void scanFailure() {
         System.out.println("scan failed!");
+
+        Toast.makeText(getApplicationContext(), "scan failed!", Toast.LENGTH_SHORT).show();
+
     } // scanFailure()
-
-    private ArrayList<RecyclerViewItem> scanResultsToRecyclerViewItems(List<ScanResult> results) {
-        ArrayList<RecyclerViewItem> resultsData = new ArrayList<>();
-
-        Iterator iterator = results.listIterator();
-        while(iterator.hasNext()) {
-            // set temp RVI
-            RecyclerViewItem newRecyclerViewItem = new RecyclerViewItem();
-            // get wifi data
-            ScanResult wifiData = (ScanResult) iterator.next();
-            String id = wifiData.SSID; // wifi 이름
-            String mac = wifiData.BSSID; // mac 주소
-            int rssi = wifiData.level; // rssi
-            // put wifi data in temp RVI
-            newRecyclerViewItem.setId(id);
-            newRecyclerViewItem.setMac(mac);
-            newRecyclerViewItem.setRssi(rssi);
-            // append temp RVI to RVI array
-            resultsData.add(newRecyclerViewItem);
-        }
-
-        return resultsData;
-    } // scanResultsToRecyclerViewItems()
 
 }

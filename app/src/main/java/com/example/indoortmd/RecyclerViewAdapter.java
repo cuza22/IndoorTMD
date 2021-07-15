@@ -25,9 +25,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        Context context = parent.getContext();
-//        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View view = inflater.inflate(R.layout.recycler_item, parent, false);
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
 
         return new ViewHolder(view);
@@ -59,9 +56,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void setItem(ScanResult item) {
-            ip.setText(String.valueOf(item.SSID));
-            mac.setText(String.valueOf(item.BSSID));
-            rssi.setText(String.valueOf(item.level));
+            ip.setText("ID: " + String.valueOf(item.SSID));
+            mac.setText("MAC: " + String.valueOf(item.BSSID));
+            rssi.setText("RSSI: " + String.valueOf(item.level));
         }
     }
 }
