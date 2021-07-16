@@ -32,8 +32,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        RecyclerViewItem item = mData.get(position);
-
         holder.setItem(mData.get(position));
     }
 
