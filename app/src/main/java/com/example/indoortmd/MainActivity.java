@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy,MM,dd,HH,mm,ss");
 
         try {
-            CSVWriter cw = new CSVWriter(new FileWriter(directory + "/" + fileName));
+            CSVWriter cw = new CSVWriter(new FileWriter(directory + "/" + fileName, true));
             Iterator iter = results.iterator();
             try {
                 while (iter.hasNext()) {

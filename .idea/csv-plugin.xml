@@ -52,6 +52,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="C:\Users\82105\Documents\AndroidStudio\DeviceExplorer\lge-lm_g900n-LMG900Ne3e915d3\data\data\com.example.indoortmd\files\2021_07_19_03_53_42.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
