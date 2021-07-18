@@ -11,7 +11,6 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     IntentFilter mIntentFilter = new IntentFilter();
     WifiManager mWifiManager;
 
-    public static final int INTERVAL = 30;
+    public static final int INTERVAL = 10;
 
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
@@ -193,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
     private void scanSuccess() {
         // scanning success
         List<ScanResult> mScanResults = mWifiManager.getScanResults();
-        System.out.println(mScanResults.get(0)); // debug
 
         // get number of wifi signals
         numberOfWifiTV.setText(String.valueOf(mScanResults.size()));
@@ -228,12 +226,18 @@ public class MainActivity extends AppCompatActivity {
     private void setDirectory() {
         // set file directory
         //파일 저장 경로 설정
-        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/IndoorTMDData";
+//        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String dirPath = getFilesDir().getAbsolutePath();
         //디렉토리 없으면 생성
+        // TODO: directory is not being created
         directory = new File(dirPath);
-        Log.i("directory", String.valueOf(directory));
-        if( !directory.exists() ){ directory.mkdir(); }
-        Log.i("directory", String.valueOf(directory.exists()));
+        Log.i("FILE", String.valueOf(directory));
+        if( !directory.exists() ) {
+            Log.i("FILE", "directory doesn't exist");
+            if (!directory.mkdirs()) {
+                Log.i("FILE", "dir not created");
+            }
+        }
 
     }
 
@@ -245,7 +249,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void writeInFile(List<ScanResult> results) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy,MM,dd,HH,mm_ss");
+        // TODO: If a file doesn't exist, create a new one
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy,MM,dd,HH,mm,ss");
 
         try {
             CSVWriter cw = new CSVWriter(new FileWriter(directory + "/" + fileName));
@@ -262,11 +268,11 @@ public class MainActivity extends AppCompatActivity {
                     cw.writeNext(CSVString);
                 }
             } finally {
-                if ( isDataCollecting ) { cw.close(); }
+                cw.close();
             }
 
         } catch (IOException e) {
-            Log.e("LOG", "Can't Save");
+            Log.e("FILE", "Can't Save");
             e.printStackTrace();
         }
 
