@@ -1,12 +1,17 @@
 # Indoor TMD
 
-### 🔸 목적
+### 예시
+
+![image](https://user-images.githubusercontent.com/66822201/128628022-a38adccb-14d0-47ef-add6-482da6a05bc2.png)
+![image](https://user-images.githubusercontent.com/66822201/128628032-88d327bb-eb39-4c6a-98ab-b5785fe73156.png)
+
+### 목적
 
 indoor TMD에 필요한 wifi 신호를 수집하는 앱 
 
 최종 목표는 wifi 신호를 이용해 학교, 도서관과 같은 특수한 공간에서 trajectory를 detect하는 것이다. 
 
-### 🔸 기능
+### 기능
 
 - 10초에 한 번씩 근처 Wifi 신호를 스캔한다
 - RSSI(신호 세기)가 강한 순서대로 정렬하여 보여준다
@@ -19,7 +24,7 @@ indoor TMD에 필요한 wifi 신호를 수집하는 앱
 - 시간, SSID, RSSI, BSSID, channelWidth, capabilities, timestamp 를 수집한다
 - Start버튼을 누르면 스캔을 시작하고, Stop버튼을 누르면 스캔을 끝낸다 ⇒ Stop버튼을 누르고 앱을 종료한 이후에도 wifi 스캔을 계속함. 스레드에 등록되어 그렇다는데.. 오류 수정 필요,
 
-### 🔸 구현
+### 구현
 
 - WifiManager 사용
 - RecyclerView를 이용하여 구현함
