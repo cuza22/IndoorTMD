@@ -3,6 +3,7 @@
 ### 🔸 목적
 
 indoor TMD에 필요한 wifi 신호를 수집하는 앱 
+
 최종 목표는 wifi 신호를 이용해 학교, 도서관과 같은 특수한 공간에서 trajectory를 detect하는 것이다. 
 
 ### 🔸 기능
@@ -15,7 +16,7 @@ indoor TMD에 필요한 wifi 신호를 수집하는 앱
 
     ⇒ 데이터를 전부 저장하지 말고, 분석이 용이하도록 저장되는 데이터의 갯수를 줄일 필요가 있음
 
-- 시간, SSID, RSSI, MAC, Bandwidth,
+- 시간, SSID, RSSI, BSSID, channelWidth, capabilities, timestamp 를 수집한다
 - Start버튼을 누르면 스캔을 시작하고, Stop버튼을 누르면 스캔을 끝낸다 ⇒ Stop버튼을 누르고 앱을 종료한 이후에도 wifi 스캔을 계속함. 스레드에 등록되어 그렇다는데.. 오류 수정 필요,
 
 ### 🔸 구현
